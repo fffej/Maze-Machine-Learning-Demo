@@ -5,6 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 using System;
+using System.Collections;
 using System.Drawing;
 <#
 string[] names = {"Coordinate", "Vector"};
@@ -19,49 +20,25 @@ Array.Copy(types, 0, all, names.Length, types.Length);
 
 namespace Maze_Machine_Learning.ABUtil
 {
-<# for (int i = 0; i < names.Length; ++i) { #>
-<# int int_cast = types[i] == "int" ? 1 : 0; #>
-<# int inv_int_cast = types[i] == "double" ? 1 : 0; #>
-<# int dub_cast = types[i] == "double" ? 2 : 0; #>
-<# int flt_cast = types[i] == "double" ? 3 : 0; #>
-<# string Vec = names[i] == "Vector" ? "this" : "Vec"; #>
-	struct <#= names[i] #>
+	class VecEnumerable<T> : IEnumerable
 	{
 		public const int Length = 2;
-		public <#= types[i] #> X { get; set; }
-		public <#= types[i] #> Y { get; set; }
-		
-		public <#= names[1 - i] #> <#= i == 0 ? names[1 - i].Substring(0, 3) : names[1 - i].Substring(0, 5) #>
+		public T X { get; set; }
+		public T Y { get; set; }
+
+		public IEnumerator GetEnumerator()
 		{
-			get { return new <#= names[1 - i] #> {X = <#= casts[inv_int_cast] #>X, Y = <#= casts[inv_int_cast] #>Y}; }
-			set { X = <#= casts[int_cast] #>value.X; Y = <#= casts[int_cast] #>value.Y; }
+			yield return X;
+			yield return Y;
 		}
 
-		public double Magnitude
+		public T[] Array
 		{
-			get { return Math.Sqrt(X * X + Y * Y); }
-			set { Angle = new Angle {Vec = <#= Vec #>, Magnitude = value - Magnitude}; }
-		}
-
-		public Angle Angle
-		{
-			get { return new Angle {Vec = <#= Vec #>}; }
-			set { X = <#= casts[int_cast] #>value.X; Y = <#= casts[int_cast] #>value.Y; }
-		}
-
-		public PointF PointF
-		{
-			get { return new PointF(<#= casts[flt_cast] #>X, <#= casts[flt_cast] #>Y); }
-			set { X = <#= casts[int_cast] #>value.X; Y = <#= casts[int_cast] #>value.Y; }
-		}
-
-		public <#= types[i] #>[] Array
-		{
-			get { return new[] {X, Y}; }
+			get { return new[] { X, Y }; }
 			set { X = value[0]; Y = value[1]; }
 		}
 
-		public <#= types[i] #> this[int index]
+		public T this[int index]
 		{
 			get
 			{
@@ -90,6 +67,39 @@ namespace Maze_Machine_Learning.ABUtil
 				}
 			}
 		}
+	}
+<# for (int i = 0; i < names.Length; ++i) { #>
+<# int int_cast = types[i] == "int" ? 1 : 0; #>
+<# int dub_cast = types[i] == "double" ? 2 : 0; #>
+<# int inv_int_cast = types[i] == "double" ? 1 : 0; #>
+<# int flt_cast = types[i] == "double" ? 3 : 0; #>
+<# string Vec = names[i] == "Vector" ? "this" : "Vec"; #>
+
+	class <#= names[i] #> : VecEnumerable<<#= types[i] #>>
+	{
+		public <#= names[1 - i] #> <#= i == 0 ? names[1 - i].Substring(0, 3) : names[1 - i].Substring(0, 5) #>
+		{
+			get { return new <#= names[1 - i] #> {X = <#= casts[inv_int_cast] #>X, Y = <#= casts[inv_int_cast] #>Y}; }
+			set { X = <#= casts[int_cast] #>value.X; Y = <#= casts[int_cast] #>value.Y; }
+		}
+
+		public double Magnitude
+		{
+			get { return Math.Sqrt(X * X + Y * Y); }
+			set { Angle = new Angle {Vec = <#= Vec #>, Magnitude = value - Magnitude}; }
+		}
+
+		public Angle Angle
+		{
+			get { return new Angle {Vec = <#= Vec #>}; }
+			set { X = <#= casts[int_cast] #>value.X; Y = <#= casts[int_cast] #>value.Y; }
+		}
+
+		public PointF PointF
+		{
+			get { return new PointF(<#= casts[flt_cast] #>X, <#= casts[flt_cast] #>Y); }
+			set { X = <#= casts[int_cast] #>value.X; Y = <#= casts[int_cast] #>value.Y; }
+		}
 
 <#	for (int o = 0; o < ops.Length; ++o) { #>
 <#		for (int a = 0; a < all.Length; ++a) { #>
@@ -112,6 +122,24 @@ namespace Maze_Machine_Learning.ABUtil
 
 <# } #>
 		public static Vector operator +(<#= names[i] #> v, Angle a) { return new Vector {X = v.X + a.X, Y = v.Y + a.Y}; }
+		
+		public static bool operator ==(<#= names[i] #> t, Vector v) { return t.Equals(v); }
+		public static bool operator ==(<#= names[i] #> t, Coordinate c) { return t.Equals(c); }
+		public static bool operator ==(<#= names[i] #> t, Angle a) { return t.Equals(a); }
+		public static bool operator !=(<#= names[i] #> t, Vector v) { return !t.Equals(v); }
+		public static bool operator !=(<#= names[i] #> t, Coordinate c) { return !t.Equals(c); }
+		public static bool operator !=(<#= names[i] #> t, Angle a) { return !t.Equals(a); }
+
+		public bool Equals(Coordinate obj) { return <#= casts[inv_int_cast] #>X == obj.X && <#= casts[inv_int_cast] #>Y == obj.Y; }
+<#
+    string compare = "return X == " + casts[int_cast] + "obj.X && Y == " + casts[int_cast] + "obj.Y;";
+    if (names[i] == "Vector") compare = "return ExtraMath.Compare(X, obj.X) && ExtraMath.Compare(Y, obj.Y);";
+#>
+		public bool Equals(Vector obj) { <#= compare #> }
+		public bool Equals(Angle obj) { <#= compare #> }
+		override public bool Equals(object obj) { return false; }
+
+		override public int GetHashCode() { return <#= casts[inv_int_cast] #>X ^ <#= casts[inv_int_cast] #>Y; }
 	}
 
 <# } #>

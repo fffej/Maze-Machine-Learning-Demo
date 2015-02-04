@@ -14,7 +14,7 @@ namespace Maze_Machine_Learning.ABUtil
         public double Theta
         {
             get { return _theta; }
-            set { _theta = value % Constants.Circles.Tau; }
+            set { _theta = value % ExtraMath.Tau; }
         }
 
         public double X
@@ -34,5 +34,23 @@ namespace Maze_Machine_Learning.ABUtil
             get { return new Vector {X = X, Y = Y}; }
             set { X = value.X; Y = value.Y; }
         }
+
+        public static bool operator ==(Angle a, Angle b) { return a.Equals(b); }
+        public static bool operator ==(Angle a, Vector b) { return a.Equals(b); }
+        public static bool operator !=(Angle a, Angle b) { return !a.Equals(b); }
+        public static bool operator !=(Angle a, Vector b) { return !a.Equals(b); }
+
+        public bool Equals(Angle obj)
+        {
+            return ExtraMath.Compare(Theta, obj.Theta) && ExtraMath.Compare(Magnitude, obj.Magnitude);
+        }
+
+        public bool Equals(Vector obj)
+        {
+            return ExtraMath.Compare(X, obj.X) && ExtraMath.Compare(Y, obj.Y);
+        }
+
+        public override bool Equals(object obj) { return false; }
+        public override int GetHashCode() { return (int)Theta ^ (int)Magnitude; }
     }
 }

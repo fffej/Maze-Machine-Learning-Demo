@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ABUtil\Angle.cs" />
-    <Compile Include="ABUtil\Constants.cs" />
+    <Compile Include="ABUtil\ExtraMath.cs" />
     <Compile Include="ABUtil\Vector.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
