@@ -21,17 +21,19 @@ namespace Maze_Machine_Learning.ABUtil
 {
 <# for (int i = 0; i < names.Length; ++i) { #>
 <# int int_cast = types[i] == "int" ? 1 : 0; #>
+<# int inv_int_cast = types[i] == "double" ? 1 : 0; #>
 <# int dub_cast = types[i] == "double" ? 2 : 0; #>
 <# int flt_cast = types[i] == "double" ? 3 : 0; #>
 <# string Vec = names[i] == "Vector" ? "this" : "Vec"; #>
-	class <#= names[i] #>
+	struct <#= names[i] #>
 	{
+		public const int Length = 2;
 		public <#= types[i] #> X { get; set; }
 		public <#= types[i] #> Y { get; set; }
 		
 		public <#= names[1 - i] #> <#= i == 0 ? names[1 - i].Substring(0, 3) : names[1 - i].Substring(0, 5) #>
 		{
-			get { return new <#= names[1 - i] #>(X, Y); }
+			get { return new <#= names[1 - i] #> {X = <#= casts[inv_int_cast] #>X, Y = <#= casts[inv_int_cast] #>Y}; }
 			set { X = <#= casts[int_cast] #>value.X; Y = <#= casts[int_cast] #>value.Y; }
 		}
 
@@ -56,18 +58,7 @@ namespace Maze_Machine_Learning.ABUtil
 		public <#= types[i] #>[] Array
 		{
 			get { return new[] {X, Y}; }
-			set
-			{
-				try
-				{
-					X = value[0];
-					Y = value[1];
-				}
-				catch (IndexOutOfRangeException)
-				{
-					throw new ArgumentException(Constants.Strings.ArrayToSmall2);
-				}
-			}
+			set { X = value[0]; Y = value[1]; }
 		}
 
 		public <#= types[i] #> this[int index]
@@ -99,46 +90,28 @@ namespace Maze_Machine_Learning.ABUtil
 				}
 			}
 		}
-	
-		public <#= names[i] #>()
-			: this(0, 0)
-		{}
-	
-<# for (int c = 0; c < types.Length; ++c) { #>
-		public <#= names[i] #>(<#= types[c] #> x, <#= types[c] #> y)
-		{
-			X = <# if (types[c] == "double" && types[i] == "int") { #>(<#= types[i] #>)<# } #>x;
-			Y = <# if (types[c] == "double" && types[i] == "int") { #>(<#= types[i] #>)<# } #>y;
-		}
 
-<# } #>
-<# for (int c = 0; c < names.Length; ++c) { #>
-		public <#= names[i] #>(<#= names[c] #> other)
-		{
-			X = <# if (types[c] == "double") { #><#= casts[int_cast] #><# } #>other.X;
-			Y = <# if (types[c] == "double") { #><#= casts[int_cast] #><# } #>other.Y;
-		}
-
-<# } #>
 <#	for (int o = 0; o < ops.Length; ++o) { #>
 <#		for (int a = 0; a < all.Length; ++a) { #>
 <#			if (!(names[i] == "Coordinate" && all[a] == "Vector")) { #>
-<# string acc_X = a < 2 ? ".X" : ""; #>
-<# string acc_Y = a < 2 ? ".Y" : ""; #>
-		public static <#= names[i] #> operator <#= ops[o] #>(<#= names[i] #> a, <#= all[a] #> b) { return new <#= names[i] #>(a.X <#= ops[o] #> b<#= acc_X #>, a.Y <#= ops[o] #> b<#= acc_X #>); }
+<#				string acc_X = "";
+				string acc_Y = "";
+				string cast_arg = all[a] == "double" ? casts[int_cast] : "";
+
+				if (a < 2) {
+					acc_X = ".X";
+					acc_Y = ".Y";
+					cast_arg = "";
+				} #>
+		public static <#= names[i] #> operator <#= ops[o] #>(<#= names[i] #> a, <#= all[a] #> b) { return new <#= names[i] #> {X = a.X <#= ops[o] #> <#= cast_arg #>b<#= acc_X #>, Y = a.Y <#= ops[o] #> <#= cast_arg #>b<#= acc_Y #>}; }
 <#				if (all[a] != names[i]) { #>
-		public static <#= names[i] #> operator <#= ops[o] #>(<#= all[a] #> a, <#= names[i] #> b) { return new <#= names[i] #>(a<#= acc_X #> <#= ops[o] #> b.X, a<#= acc_X #> <#= ops[o] #> b.Y); }
+		public static <#= names[i] #> operator <#= ops[o] #>(<#= all[a] #> a, <#= names[i] #> b) { return new <#= names[i] #> {X = <#= cast_arg #>a<#= acc_X #> <#= ops[o] #> b.X, Y = <#= cast_arg #>a<#= acc_Y #> <#= ops[o] #> b.Y}; }
 <#				} #>
 <#			} #>
 <#		} #>
 
 <# } #>
-		public static Vector operator +(<#= names[i] #> v, Angle a) { return new Vector(v.X + a.X, v.Y + a.Y); }
-
-		public int Length()
-		{
-			return 2;
-		}
+		public static Vector operator +(<#= names[i] #> v, Angle a) { return new Vector {X = v.X + a.X, Y = v.Y + a.Y}; }
 	}
 
 <# } #>

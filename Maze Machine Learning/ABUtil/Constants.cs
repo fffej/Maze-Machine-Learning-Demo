@@ -7,7 +7,7 @@ namespace Maze_Machine_Learning.ABUtil
     {
         public struct Strings
         {
-            public const string ArrayToSmall2 = "Array is too small, must be atleast two elements in size.";
+
         }
 
         public struct Circles

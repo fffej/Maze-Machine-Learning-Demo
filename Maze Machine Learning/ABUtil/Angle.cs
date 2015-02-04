@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Maze_Machine_Learning.ABUtil
 {
-    class Angle
+    struct Angle
     {
         private double _theta;
         public double Magnitude { get; set; }
@@ -31,18 +31,8 @@ namespace Maze_Machine_Learning.ABUtil
 
         public Vector Vec
         {
-            get { return new Vector(X, Y); }
+            get { return new Vector {X = X, Y = Y}; }
             set { X = value.X; Y = value.Y; }
-        }
-
-        public Angle()
-            : this(0, 0)
-        { }
-
-        public Angle(double theta, double magnitude)
-        {
-            Theta = theta;
-            Magnitude = magnitude;
         }
     }
 }
