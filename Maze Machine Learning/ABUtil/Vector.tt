@@ -19,76 +19,33 @@ Array.Copy(types, 0, all, names.Length, types.Length);
 
 namespace Maze_Machine_Learning.ABUtil
 {
-	class Angle
-	{
-		private double _theta;
-		public double Magnitude { get; set; }
-
-		public double Theta
-		{
-			get { return _theta; }
-			set { _theta = value % Constants.Circles.Tau; }
-		}
-		
-        public double X
-        {
-            get { return Magnitude * Math.Cos(_theta); }
-            set { Theta = Math.Atan(Y / value); Magnitude = Math.Sqrt(value * value + Y * Y); }
-        }
-
-        public double Y
-        {
-            get { return Magnitude * Math.Sin(_theta); }
-            set { Theta = Math.Atan(value / X); Magnitude = Math.Sqrt(X * X + value * value); }
-        }
-
-		public Vector Vector
-		{
-			get { return new Vector(X, Y); }
-			set { X = value.X; Y = value.Y; }
-		}
-
-		public Angle()
-			:this(0, 0)
-		{}
-
-		public Angle(double theta, double magnitude)
-		{
-			Theta = theta;
-			Magnitude = magnitude;
-		}
-	}
-
 <# for (int i = 0; i < names.Length; ++i) { #>
 <# int int_cast = types[i] == "int" ? 1 : 0; #>
 <# int dub_cast = types[i] == "double" ? 2 : 0; #>
 <# int flt_cast = types[i] == "double" ? 3 : 0; #>
+<# string Vec = names[i] == "Vector" ? "this" : "Vec"; #>
 	class <#= names[i] #>
 	{
 		public <#= types[i] #> X { get; set; }
 		public <#= types[i] #> Y { get; set; }
-
-		public double Magnitude
-		{
-			get { return Math.Sqrt(X * X + Y * Y); }
-			set {
-				
-			}
-		}
 		
-		public <#= names[1 - i] #> <#= names[1 - i] #>
+		public <#= names[1 - i] #> <#= i == 0 ? names[1 - i].Substring(0, 3) : names[1 - i].Substring(0, 5) #>
 		{
 			get { return new <#= names[1 - i] #>(X, Y); }
 			set { X = <#= casts[int_cast] #>value.X; Y = <#= casts[int_cast] #>value.Y; }
 		}
-<# if (names[i] == "Vector") { #>
+
+		public double Magnitude
+		{
+			get { return Math.Sqrt(X * X + Y * Y); }
+			set { Angle = new Angle {Vec = <#= Vec #>, Magnitude = value - Magnitude}; }
+		}
 
 		public Angle Angle
 		{
-			get { return new Angle {Vector = this}; }
-			set { X = value.X; Y = value.Y; }
+			get { return new Angle {Vec = <#= Vec #>}; }
+			set { X = <#= casts[int_cast] #>value.X; Y = <#= casts[int_cast] #>value.Y; }
 		}
-<# } #>
 
 		public PointF PointF
 		{
@@ -106,42 +63,42 @@ namespace Maze_Machine_Learning.ABUtil
 					X = value[0];
 					Y = value[1];
 				}
-                catch (IndexOutOfRangeException)
-                {
-                    throw new ArgumentException(Constants.Strings.ArrayToSmall2);
-                }
+				catch (IndexOutOfRangeException)
+				{
+					throw new ArgumentException(Constants.Strings.ArrayToSmall2);
+				}
 			}
 		}
 
-        public <#= types[i] #> this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case 0:
-                        return X;
-                    case 1:
-                        return Y;
-                    default:
-                        throw new IndexOutOfRangeException();
-                }
-            }
-            set
-            {
-                switch (index)
-                {
-                    case 0:
-                        X = value;
-                        break;
-                    case 1:
-                        Y = value;
-                        break;
-                    default:
-                        throw new IndexOutOfRangeException();
-                }
-            }
-        }
+		public <#= types[i] #> this[int index]
+		{
+			get
+			{
+				switch (index)
+				{
+					case 0:
+						return X;
+					case 1:
+						return Y;
+					default:
+						throw new IndexOutOfRangeException();
+				}
+			}
+			set
+			{
+				switch (index)
+				{
+					case 0:
+						X = value;
+						break;
+					case 1:
+						Y = value;
+						break;
+					default:
+						throw new IndexOutOfRangeException();
+				}
+			}
+		}
 	
 		public <#= names[i] #>()
 			: this(0, 0)
