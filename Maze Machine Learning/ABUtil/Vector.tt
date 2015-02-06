@@ -20,7 +20,7 @@ Array.Copy(types, 0, all, names.Length, types.Length);
 
 namespace Maze_Machine_Learning.ABUtil
 {
-	class VecEnumerable<T> : IEnumerable
+	public class VecEnumerable<T> : IEnumerable
 	{
 		public const int Length = 2;
 		public T X { get; set; }
@@ -75,7 +75,7 @@ namespace Maze_Machine_Learning.ABUtil
 <# int flt_cast = types[i] == "double" ? 3 : 0; #>
 <# string Vec = names[i] == "Vector" ? "this" : "Vec"; #>
 
-	class <#= names[i] #> : VecEnumerable<<#= types[i] #>>
+	public class <#= names[i] #> : VecEnumerable<<#= types[i] #>>
 	{
 		public <#= names[1 - i] #> <#= i == 0 ? names[1 - i].Substring(0, 3) : names[1 - i].Substring(0, 5) #>
 		{
@@ -101,6 +101,22 @@ namespace Maze_Machine_Learning.ABUtil
 			set { X = <#= casts[int_cast] #>value.X; Y = <#= casts[int_cast] #>value.Y; }
 		}
 
+        public <#= names[i] #>()
+            : this(0, 0)
+        {}
+
+        public <#= names[i] #>(<#= types[i] #> x, <#= types[i] #> y)
+        {
+            X = x;
+            Y = y;
+        }
+
+		public void Abs()
+		{
+			X = Math.Abs(X);
+			Y = Math.Abs(Y);
+		}
+
 <#	for (int o = 0; o < ops.Length; ++o) { #>
 <#		for (int a = 0; a < all.Length; ++a) { #>
 <#			if (!(names[i] == "Coordinate" && all[a] == "Vector")) { #>
@@ -113,15 +129,15 @@ namespace Maze_Machine_Learning.ABUtil
 					acc_Y = ".Y";
 					cast_arg = "";
 				} #>
-		public static <#= names[i] #> operator <#= ops[o] #>(<#= names[i] #> a, <#= all[a] #> b) { return new <#= names[i] #> {X = a.X <#= ops[o] #> <#= cast_arg #>b<#= acc_X #>, Y = a.Y <#= ops[o] #> <#= cast_arg #>b<#= acc_Y #>}; }
+		public static <#= names[i] #> operator <#= ops[o] #>(<#= names[i] #> a, <#= all[a] #> b) { return new <#= names[i] #>(a.X <#= ops[o] #> <#= cast_arg #>b<#= acc_X #>, a.Y <#= ops[o] #> <#= cast_arg #>b<#= acc_Y #>); }
 <#				if (all[a] != names[i]) { #>
-		public static <#= names[i] #> operator <#= ops[o] #>(<#= all[a] #> a, <#= names[i] #> b) { return new <#= names[i] #> {X = <#= cast_arg #>a<#= acc_X #> <#= ops[o] #> b.X, Y = <#= cast_arg #>a<#= acc_Y #> <#= ops[o] #> b.Y}; }
+		public static <#= names[i] #> operator <#= ops[o] #>(<#= all[a] #> a, <#= names[i] #> b) { return new <#= names[i] #>(<#= cast_arg #>a<#= acc_X #> <#= ops[o] #> b.X, <#= cast_arg #>a<#= acc_Y #> <#= ops[o] #> b.Y); }
 <#				} #>
 <#			} #>
 <#		} #>
 
 <# } #>
-		public static Vector operator +(<#= names[i] #> v, Angle a) { return new Vector {X = v.X + a.X, Y = v.Y + a.Y}; }
+		public static Vector operator +(<#= names[i] #> v, Angle a) { return new Vector(v.X + a.X, v.Y + a.Y); }
 		
 		public static bool operator ==(<#= names[i] #> t, Vector v) { return t.Equals(v); }
 		public static bool operator ==(<#= names[i] #> t, Coordinate c) { return t.Equals(c); }
@@ -131,10 +147,8 @@ namespace Maze_Machine_Learning.ABUtil
 		public static bool operator !=(<#= names[i] #> t, Angle a) { return !t.Equals(a); }
 
 		public bool Equals(Coordinate obj) { return <#= casts[inv_int_cast] #>X == obj.X && <#= casts[inv_int_cast] #>Y == obj.Y; }
-<#
-    string compare = "return X == " + casts[int_cast] + "obj.X && Y == " + casts[int_cast] + "obj.Y;";
-    if (names[i] == "Vector") compare = "return ExtraMath.Compare(X, obj.X) && ExtraMath.Compare(Y, obj.Y);";
-#>
+<#  string compare = "return X == " + casts[int_cast] + "obj.X && Y == " + casts[int_cast] + "obj.Y;"; #>
+<#  if (names[i] == "Vector") compare = "return ExtraMath.Compare(X, obj.X) && ExtraMath.Compare(Y, obj.Y);"; #>
 		public bool Equals(Vector obj) { <#= compare #> }
 		public bool Equals(Angle obj) { <#= compare #> }
 		override public bool Equals(object obj) { return false; }

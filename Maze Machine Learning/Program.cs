@@ -5,31 +5,15 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Drawing;
-using ABUtil;
 
 namespace Maze_Machine_Learning
 {
     /// <summary>
-    /// Precalculated mathematical constants.
-    /// </summary>
-    /// <see href="http://www.tauday.com/tau-manifesto">Tau Manifesto</see>
-    public struct Consts
-    {
-        public const double π = 3.1415926535897;  // π, pi,      half turn,      C/D
-        public const double τ = 6.2831853071795;  // τ, tau,     full turn,      C/R
-        public const double η = 1.5707963267948;  // η, eta,     quarter turn,   C/4R
-        public const double η2 = 2 * η;
-        public const double η3 = 3 * η;
-        public const double η4 = 4 * η;
-
-    }
-
-    /// <summary>
     /// A <c>Wall_grid</c> based Maze.
     /// </summary>
-    class Maze
+    class Maze_Old
     {
-        public WallGrid walls;
+        public WallGridMaze walls;
         public CoordI start;
         public CoordI goal;
         public CoordD cell_size;
@@ -40,7 +24,7 @@ namespace Maze_Machine_Learning
 
         public Maze(int width, int height, int window_w, int window_h)
         {
-            walls = new WallGrid(width, height);
+            walls = new WallGridMaze(width, height);
 
             draw_rect = new Rectangle(0, 0, window_w, window_h);
             cell_size = new CoordD((double)window_w / (double)width, (double)window_h / (double)height);
@@ -55,7 +39,7 @@ namespace Maze_Machine_Learning
         public void scale(int width, int height)
         {
             draw_rect = new Rectangle(0, 0, width, height);
-            cell_size = new CoordD((double)width / (double)walls.size.x, (double)height / (double)walls.size.y);
+            cell_size = new CoordD((double)width / (double)walls.Size.x, (double)height / (double)walls.Size.y);
         }
 
         public void resize(int width, int height)
@@ -65,15 +49,15 @@ namespace Maze_Machine_Learning
 
         public void generate()
         {
-            goal = new CoordI(rand.Next(0, 2) * (walls.size.x - 1), rand.Next(0, 2) * (walls.size.y - 1));
+            goal = new CoordI(rand.Next(0, 2) * (walls.Size.x - 1), rand.Next(0, 2) * (walls.Size.y - 1));
             start = walls.generate(goal);
         }
 
         public void draw(PaintEventArgs e)
         {
-            for (int x = 0; x < walls.size.x; ++x)
+            for (int x = 0; x < walls.Size.x; ++x)
             {
-                for (int y = 0; y < walls.size.y; ++y)
+                for (int y = 0; y < walls.Size.y; ++y)
                 {
                     for (int d = 0; d < 2; ++d)
                     {
@@ -91,8 +75,8 @@ namespace Maze_Machine_Learning
                 }
             }
 
-            e.Graphics.DrawLine(Pens.White, (float)cell_size.x * (float)walls.size.x, 0, (float)cell_size.x * (float)walls.size.x, (float)cell_size.y * (float)walls.size.y);
-            e.Graphics.DrawLine(Pens.White, 0, (float)cell_size.y * (float)walls.size.y, (float)cell_size.x * (float)walls.size.x, (float)cell_size.y * (float)walls.size.y);
+            e.Graphics.DrawLine(Pens.White, (float)cell_size.x * (float)walls.Size.x, 0, (float)cell_size.x * (float)walls.Size.x, (float)cell_size.y * (float)walls.Size.y);
+            e.Graphics.DrawLine(Pens.White, 0, (float)cell_size.y * (float)walls.Size.y, (float)cell_size.x * (float)walls.Size.x, (float)cell_size.y * (float)walls.Size.y);
 
             Rectangle r1 = new Rectangle((int)(start.x * cell_size.x), (int)(start.y * cell_size.y), (int)cell_size.x, (int)cell_size.y);
             e.Graphics.DrawString("S", font, Brushes.Red, r1, font_format);
@@ -477,7 +461,7 @@ namespace Maze_Machine_Learning
 
             if (Program.settings.think_distance)
             {
-                brain.set_input(num_eyes + extra++, (float)(((m.goal * m.cell_size - velocity.O) / ((m.walls.size + 1) * m.cell_size)).length()));
+                brain.set_input(num_eyes + extra++, (float)(((m.goal * m.cell_size - velocity.O) / ((m.walls.Size + 1) * m.cell_size)).length()));
             }
 
             if (Program.settings.think_path)
@@ -497,7 +481,7 @@ namespace Maze_Machine_Learning
                 for (int i = 0; i < 4; ++i)
                 {
                     int index = (i + dir) % 4;
-                    if (m.walls.test_wall(grid_pos, index) || this_pos < m.walls.get_path_value(grid_pos + WallGrid.order[index]))
+                    if (m.walls.test_wall(grid_pos, index) || this_pos < m.walls.get_path_value(grid_pos + WallGridMaze.Order[index]))
                         brain.set_input(num_eyes + extra++, 0);
                     else
                         brain.set_input(num_eyes + extra++, 1);

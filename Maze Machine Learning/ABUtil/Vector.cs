@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace Maze_Machine_Learning.ABUtil
 {
-	class VecEnumerable<T> : IEnumerable
+	public class VecEnumerable<T> : IEnumerable
 	{
 		public const int Length = 2;
 		public T X { get; set; }
@@ -53,7 +53,7 @@ namespace Maze_Machine_Learning.ABUtil
 		}
 	}
 
-	class Coordinate : VecEnumerable<int>
+	public class Coordinate : VecEnumerable<int>
 	{
 		public Vector Vec
 		{
@@ -79,31 +79,47 @@ namespace Maze_Machine_Learning.ABUtil
 			set { X = (int)value.X; Y = (int)value.Y; }
 		}
 
-		public static Coordinate operator +(Coordinate a, Coordinate b) { return new Coordinate {X = a.X + b.X, Y = a.Y + b.Y}; }
-		public static Coordinate operator +(Coordinate a, int b) { return new Coordinate {X = a.X + b, Y = a.Y + b}; }
-		public static Coordinate operator +(int a, Coordinate b) { return new Coordinate {X = a + b.X, Y = a + b.Y}; }
-		public static Coordinate operator +(Coordinate a, double b) { return new Coordinate {X = a.X + (int)b, Y = a.Y + (int)b}; }
-		public static Coordinate operator +(double a, Coordinate b) { return new Coordinate {X = (int)a + b.X, Y = (int)a + b.Y}; }
+        public Coordinate()
+            : this(0, 0)
+        {}
 
-		public static Coordinate operator -(Coordinate a, Coordinate b) { return new Coordinate {X = a.X - b.X, Y = a.Y - b.Y}; }
-		public static Coordinate operator -(Coordinate a, int b) { return new Coordinate {X = a.X - b, Y = a.Y - b}; }
-		public static Coordinate operator -(int a, Coordinate b) { return new Coordinate {X = a - b.X, Y = a - b.Y}; }
-		public static Coordinate operator -(Coordinate a, double b) { return new Coordinate {X = a.X - (int)b, Y = a.Y - (int)b}; }
-		public static Coordinate operator -(double a, Coordinate b) { return new Coordinate {X = (int)a - b.X, Y = (int)a - b.Y}; }
+        public Coordinate(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
 
-		public static Coordinate operator *(Coordinate a, Coordinate b) { return new Coordinate {X = a.X * b.X, Y = a.Y * b.Y}; }
-		public static Coordinate operator *(Coordinate a, int b) { return new Coordinate {X = a.X * b, Y = a.Y * b}; }
-		public static Coordinate operator *(int a, Coordinate b) { return new Coordinate {X = a * b.X, Y = a * b.Y}; }
-		public static Coordinate operator *(Coordinate a, double b) { return new Coordinate {X = a.X * (int)b, Y = a.Y * (int)b}; }
-		public static Coordinate operator *(double a, Coordinate b) { return new Coordinate {X = (int)a * b.X, Y = (int)a * b.Y}; }
+		public void Abs()
+		{
+			X = Math.Abs(X);
+			Y = Math.Abs(Y);
+		}
 
-		public static Coordinate operator /(Coordinate a, Coordinate b) { return new Coordinate {X = a.X / b.X, Y = a.Y / b.Y}; }
-		public static Coordinate operator /(Coordinate a, int b) { return new Coordinate {X = a.X / b, Y = a.Y / b}; }
-		public static Coordinate operator /(int a, Coordinate b) { return new Coordinate {X = a / b.X, Y = a / b.Y}; }
-		public static Coordinate operator /(Coordinate a, double b) { return new Coordinate {X = a.X / (int)b, Y = a.Y / (int)b}; }
-		public static Coordinate operator /(double a, Coordinate b) { return new Coordinate {X = (int)a / b.X, Y = (int)a / b.Y}; }
+		public static Coordinate operator +(Coordinate a, Coordinate b) { return new Coordinate(a.X + b.X, a.Y + b.Y); }
+		public static Coordinate operator +(Coordinate a, int b) { return new Coordinate(a.X + b, a.Y + b); }
+		public static Coordinate operator +(int a, Coordinate b) { return new Coordinate(a + b.X, a + b.Y); }
+		public static Coordinate operator +(Coordinate a, double b) { return new Coordinate(a.X + (int)b, a.Y + (int)b); }
+		public static Coordinate operator +(double a, Coordinate b) { return new Coordinate((int)a + b.X, (int)a + b.Y); }
 
-		public static Vector operator +(Coordinate v, Angle a) { return new Vector {X = v.X + a.X, Y = v.Y + a.Y}; }
+		public static Coordinate operator -(Coordinate a, Coordinate b) { return new Coordinate(a.X - b.X, a.Y - b.Y); }
+		public static Coordinate operator -(Coordinate a, int b) { return new Coordinate(a.X - b, a.Y - b); }
+		public static Coordinate operator -(int a, Coordinate b) { return new Coordinate(a - b.X, a - b.Y); }
+		public static Coordinate operator -(Coordinate a, double b) { return new Coordinate(a.X - (int)b, a.Y - (int)b); }
+		public static Coordinate operator -(double a, Coordinate b) { return new Coordinate((int)a - b.X, (int)a - b.Y); }
+
+		public static Coordinate operator *(Coordinate a, Coordinate b) { return new Coordinate(a.X * b.X, a.Y * b.Y); }
+		public static Coordinate operator *(Coordinate a, int b) { return new Coordinate(a.X * b, a.Y * b); }
+		public static Coordinate operator *(int a, Coordinate b) { return new Coordinate(a * b.X, a * b.Y); }
+		public static Coordinate operator *(Coordinate a, double b) { return new Coordinate(a.X * (int)b, a.Y * (int)b); }
+		public static Coordinate operator *(double a, Coordinate b) { return new Coordinate((int)a * b.X, (int)a * b.Y); }
+
+		public static Coordinate operator /(Coordinate a, Coordinate b) { return new Coordinate(a.X / b.X, a.Y / b.Y); }
+		public static Coordinate operator /(Coordinate a, int b) { return new Coordinate(a.X / b, a.Y / b); }
+		public static Coordinate operator /(int a, Coordinate b) { return new Coordinate(a / b.X, a / b.Y); }
+		public static Coordinate operator /(Coordinate a, double b) { return new Coordinate(a.X / (int)b, a.Y / (int)b); }
+		public static Coordinate operator /(double a, Coordinate b) { return new Coordinate((int)a / b.X, (int)a / b.Y); }
+
+		public static Vector operator +(Coordinate v, Angle a) { return new Vector(v.X + a.X, v.Y + a.Y); }
 		
 		public static bool operator ==(Coordinate t, Vector v) { return t.Equals(v); }
 		public static bool operator ==(Coordinate t, Coordinate c) { return t.Equals(c); }
@@ -121,7 +137,7 @@ namespace Maze_Machine_Learning.ABUtil
 	}
 
 
-	class Vector : VecEnumerable<double>
+	public class Vector : VecEnumerable<double>
 	{
 		public Coordinate Coord
 		{
@@ -147,39 +163,55 @@ namespace Maze_Machine_Learning.ABUtil
 			set { X = value.X; Y = value.Y; }
 		}
 
-		public static Vector operator +(Vector a, Coordinate b) { return new Vector {X = a.X + b.X, Y = a.Y + b.Y}; }
-		public static Vector operator +(Coordinate a, Vector b) { return new Vector {X = a.X + b.X, Y = a.Y + b.Y}; }
-		public static Vector operator +(Vector a, Vector b) { return new Vector {X = a.X + b.X, Y = a.Y + b.Y}; }
-		public static Vector operator +(Vector a, int b) { return new Vector {X = a.X + b, Y = a.Y + b}; }
-		public static Vector operator +(int a, Vector b) { return new Vector {X = a + b.X, Y = a + b.Y}; }
-		public static Vector operator +(Vector a, double b) { return new Vector {X = a.X + b, Y = a.Y + b}; }
-		public static Vector operator +(double a, Vector b) { return new Vector {X = a + b.X, Y = a + b.Y}; }
+        public Vector()
+            : this(0, 0)
+        {}
 
-		public static Vector operator -(Vector a, Coordinate b) { return new Vector {X = a.X - b.X, Y = a.Y - b.Y}; }
-		public static Vector operator -(Coordinate a, Vector b) { return new Vector {X = a.X - b.X, Y = a.Y - b.Y}; }
-		public static Vector operator -(Vector a, Vector b) { return new Vector {X = a.X - b.X, Y = a.Y - b.Y}; }
-		public static Vector operator -(Vector a, int b) { return new Vector {X = a.X - b, Y = a.Y - b}; }
-		public static Vector operator -(int a, Vector b) { return new Vector {X = a - b.X, Y = a - b.Y}; }
-		public static Vector operator -(Vector a, double b) { return new Vector {X = a.X - b, Y = a.Y - b}; }
-		public static Vector operator -(double a, Vector b) { return new Vector {X = a - b.X, Y = a - b.Y}; }
+        public Vector(double x, double y)
+        {
+            X = x;
+            Y = y;
+        }
 
-		public static Vector operator *(Vector a, Coordinate b) { return new Vector {X = a.X * b.X, Y = a.Y * b.Y}; }
-		public static Vector operator *(Coordinate a, Vector b) { return new Vector {X = a.X * b.X, Y = a.Y * b.Y}; }
-		public static Vector operator *(Vector a, Vector b) { return new Vector {X = a.X * b.X, Y = a.Y * b.Y}; }
-		public static Vector operator *(Vector a, int b) { return new Vector {X = a.X * b, Y = a.Y * b}; }
-		public static Vector operator *(int a, Vector b) { return new Vector {X = a * b.X, Y = a * b.Y}; }
-		public static Vector operator *(Vector a, double b) { return new Vector {X = a.X * b, Y = a.Y * b}; }
-		public static Vector operator *(double a, Vector b) { return new Vector {X = a * b.X, Y = a * b.Y}; }
+		public void Abs()
+		{
+			X = Math.Abs(X);
+			Y = Math.Abs(Y);
+		}
 
-		public static Vector operator /(Vector a, Coordinate b) { return new Vector {X = a.X / b.X, Y = a.Y / b.Y}; }
-		public static Vector operator /(Coordinate a, Vector b) { return new Vector {X = a.X / b.X, Y = a.Y / b.Y}; }
-		public static Vector operator /(Vector a, Vector b) { return new Vector {X = a.X / b.X, Y = a.Y / b.Y}; }
-		public static Vector operator /(Vector a, int b) { return new Vector {X = a.X / b, Y = a.Y / b}; }
-		public static Vector operator /(int a, Vector b) { return new Vector {X = a / b.X, Y = a / b.Y}; }
-		public static Vector operator /(Vector a, double b) { return new Vector {X = a.X / b, Y = a.Y / b}; }
-		public static Vector operator /(double a, Vector b) { return new Vector {X = a / b.X, Y = a / b.Y}; }
+		public static Vector operator +(Vector a, Coordinate b) { return new Vector(a.X + b.X, a.Y + b.Y); }
+		public static Vector operator +(Coordinate a, Vector b) { return new Vector(a.X + b.X, a.Y + b.Y); }
+		public static Vector operator +(Vector a, Vector b) { return new Vector(a.X + b.X, a.Y + b.Y); }
+		public static Vector operator +(Vector a, int b) { return new Vector(a.X + b, a.Y + b); }
+		public static Vector operator +(int a, Vector b) { return new Vector(a + b.X, a + b.Y); }
+		public static Vector operator +(Vector a, double b) { return new Vector(a.X + b, a.Y + b); }
+		public static Vector operator +(double a, Vector b) { return new Vector(a + b.X, a + b.Y); }
 
-		public static Vector operator +(Vector v, Angle a) { return new Vector {X = v.X + a.X, Y = v.Y + a.Y}; }
+		public static Vector operator -(Vector a, Coordinate b) { return new Vector(a.X - b.X, a.Y - b.Y); }
+		public static Vector operator -(Coordinate a, Vector b) { return new Vector(a.X - b.X, a.Y - b.Y); }
+		public static Vector operator -(Vector a, Vector b) { return new Vector(a.X - b.X, a.Y - b.Y); }
+		public static Vector operator -(Vector a, int b) { return new Vector(a.X - b, a.Y - b); }
+		public static Vector operator -(int a, Vector b) { return new Vector(a - b.X, a - b.Y); }
+		public static Vector operator -(Vector a, double b) { return new Vector(a.X - b, a.Y - b); }
+		public static Vector operator -(double a, Vector b) { return new Vector(a - b.X, a - b.Y); }
+
+		public static Vector operator *(Vector a, Coordinate b) { return new Vector(a.X * b.X, a.Y * b.Y); }
+		public static Vector operator *(Coordinate a, Vector b) { return new Vector(a.X * b.X, a.Y * b.Y); }
+		public static Vector operator *(Vector a, Vector b) { return new Vector(a.X * b.X, a.Y * b.Y); }
+		public static Vector operator *(Vector a, int b) { return new Vector(a.X * b, a.Y * b); }
+		public static Vector operator *(int a, Vector b) { return new Vector(a * b.X, a * b.Y); }
+		public static Vector operator *(Vector a, double b) { return new Vector(a.X * b, a.Y * b); }
+		public static Vector operator *(double a, Vector b) { return new Vector(a * b.X, a * b.Y); }
+
+		public static Vector operator /(Vector a, Coordinate b) { return new Vector(a.X / b.X, a.Y / b.Y); }
+		public static Vector operator /(Coordinate a, Vector b) { return new Vector(a.X / b.X, a.Y / b.Y); }
+		public static Vector operator /(Vector a, Vector b) { return new Vector(a.X / b.X, a.Y / b.Y); }
+		public static Vector operator /(Vector a, int b) { return new Vector(a.X / b, a.Y / b); }
+		public static Vector operator /(int a, Vector b) { return new Vector(a / b.X, a / b.Y); }
+		public static Vector operator /(Vector a, double b) { return new Vector(a.X / b, a.Y / b); }
+		public static Vector operator /(double a, Vector b) { return new Vector(a / b.X, a / b.Y); }
+
+		public static Vector operator +(Vector v, Angle a) { return new Vector(v.X + a.X, v.Y + a.Y); }
 		
 		public static bool operator ==(Vector t, Vector v) { return t.Equals(v); }
 		public static bool operator ==(Vector t, Coordinate c) { return t.Equals(c); }

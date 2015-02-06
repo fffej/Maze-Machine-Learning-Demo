@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace Maze_Machine_Learning.ABUtil
 {
-    struct Angle
+    public enum Direction { None, West, North, East, South }
+
+    public class Angle
     {
+        private static readonly double[] Cardinals = Enumerable.Range(0, 4).Select(x => ExtraMath.Tau / (4 - x)).ToArray();
+        private static readonly double[] Quads = Enumerable.Range(0, 3).Select(x => ExtraMath.Tau / (4 - x) - 1.0 / 8.0).ToArray();
+
         private double _theta;
         public double Magnitude { get; set; }
 
@@ -35,10 +40,42 @@ namespace Maze_Machine_Learning.ABUtil
             set { X = value.X; Y = value.Y; }
         }
 
+        public Angle()
+            : this(0, 0)
+        {}
+
+        public Angle(double theta, double magnitude)
+        {
+            Theta = theta;
+            Magnitude = magnitude;
+        }
+
+        public bool InRange(double a1, double a2)
+        {
+            return a1 < a2 ? Theta >= a1 && Theta < a2 : Theta >= a1 || Theta < a2;
+        }
+
+        public bool InCardinal(Direction dir)
+        {
+            return InRange(Cardinals[((int)dir - 1) % 4], Cardinals[((int)dir + 1) % 5]);
+        }
+
+        public bool InQuad(Direction dir)
+        {
+            return InRange(Quads[((int)dir - 1) % 4], Quads[(int)dir]);
+        }
+
+        public static Angle operator +(Angle a, double b) { return new Angle(a.Theta, a.Magnitude + b); }
+        public static Angle operator -(Angle a, double b) { return new Angle(a.Theta, a.Magnitude - b); }
+        public static Angle operator *(Angle a, double b) { return new Angle(a.Theta, a.Magnitude * b); }
+        public static Angle operator /(Angle a, double b) { return new Angle(a.Theta, a.Magnitude / b); }
+
         public static bool operator ==(Angle a, Angle b) { return a.Equals(b); }
         public static bool operator ==(Angle a, Vector b) { return a.Equals(b); }
+        public static bool operator ==(Vector a, Angle b) { return b.Equals(a); }
         public static bool operator !=(Angle a, Angle b) { return !a.Equals(b); }
         public static bool operator !=(Angle a, Vector b) { return !a.Equals(b); }
+        public static bool operator !=(Vector a, Angle b) { return !b.Equals(a); }
 
         public bool Equals(Angle obj)
         {

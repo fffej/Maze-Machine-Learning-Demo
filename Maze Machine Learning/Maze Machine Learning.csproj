@@ -52,8 +52,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Vector.tt</DependentUpon>
     </Compile>
-    <Compile Include="ABUtil\Coord_old.cs" />
-    <Compile Include="ABUtil\Ray.cs" />
+    <Compile Include="ABUtil\Line.cs" />
+    <Compile Include="Maze\Cell.cs" />
+    <Compile Include="Maze\PaintMaze.cs" />
+    <Compile Include="Maze\WallP.cs" />
     <Compile Include="Maze_Form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -69,7 +71,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="WallGrid.cs" />
+    <Compile Include="Maze\GridMaze.cs" />
     <EmbeddedResource Include="Maze_Form.resx">
       <DependentUpon>Maze_Form.cs</DependentUpon>
     </EmbeddedResource>

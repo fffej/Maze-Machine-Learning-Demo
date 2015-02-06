@@ -15,15 +15,6 @@ namespace Maze_Machine_Learning.ABUtil
         /// <summary> The real circle constant. </summary>
         public const double Eta = Math.PI / 2.0;
 
-        /// <summary> One quater turn. </summary>
-        public const double Q1 = Math.PI / 2.0;
-        /// <summary> Two quater turn. </summary>
-        public const double Q2 = Math.PI;
-        /// <summary> Three quater turn. </summary>
-        public const double Q3 = Math.PI * 1.5;
-        /// <summary> Four quater turn. </summary>
-        public const double Q4 = Math.PI * 2.0;
-
         /// <summary> The default difference betwean doubles to consider them equal. </summary>
         public const double DefaultMoE = 1.0 / 3.0 - 0.33333333;
 
