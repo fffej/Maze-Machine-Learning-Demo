@@ -65,10 +65,25 @@ namespace Maze_Machine_Learning.ABUtil
             return InRange(Quads[((int)dir - 1) % 4], Quads[(int)dir]);
         }
 
+        public static Angle operator +(Angle a, Angle b) { return new Angle { X = a.X + b.X, Y = a.Y + b.Y }; }
+        public static Angle operator -(Angle a, Angle b) { return new Angle { X = a.X - b.X, Y = a.Y - b.Y }; }
+        public static Angle operator *(Angle a, Angle b) { return new Angle { X = a.X * b.X, Y = a.Y * b.Y }; }
+        public static Angle operator /(Angle a, Angle b) { return new Angle { X = a.X / b.X, Y = a.Y / b.Y }; }
+
+        public static Angle operator +(Angle a, Vector b) { return new Angle { X = a.X + b.X, Y = a.Y + b.Y }; }
+        public static Angle operator -(Angle a, Vector b) { return new Angle { X = a.X - b.X, Y = a.Y - b.Y }; }
+        public static Angle operator *(Angle a, Vector b) { return new Angle { X = a.X * b.X, Y = a.Y * b.Y }; }
+        public static Angle operator /(Angle a, Vector b) { return new Angle { X = a.X / b.X, Y = a.Y / b.Y }; }
+
         public static Angle operator +(Angle a, double b) { return new Angle(a.Theta, a.Magnitude + b); }
         public static Angle operator -(Angle a, double b) { return new Angle(a.Theta, a.Magnitude - b); }
         public static Angle operator *(Angle a, double b) { return new Angle(a.Theta, a.Magnitude * b); }
         public static Angle operator /(Angle a, double b) { return new Angle(a.Theta, a.Magnitude / b); }
+
+        public static Angle operator +(double b, Angle a) { return new Angle(a.Theta, b + a.Magnitude); }
+        public static Angle operator -(double b, Angle a) { return new Angle(a.Theta, b - a.Magnitude); }
+        public static Angle operator *(double b, Angle a) { return new Angle(a.Theta, b * a.Magnitude); }
+        public static Angle operator /(double b, Angle a) { return new Angle(a.Theta, b / a.Magnitude); }
 
         public static bool operator ==(Angle a, Angle b) { return a.Equals(b); }
         public static bool operator ==(Angle a, Vector b) { return a.Equals(b); }
@@ -88,6 +103,6 @@ namespace Maze_Machine_Learning.ABUtil
         }
 
         public override bool Equals(object obj) { return false; }
-        public override int GetHashCode() { return (int)Theta ^ (int)Magnitude; }
+        public override int GetHashCode() { return (int)(Theta + ExtraMath.HashPrime * Magnitude); }
     }
 }

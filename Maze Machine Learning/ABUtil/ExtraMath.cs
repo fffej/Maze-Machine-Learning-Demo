@@ -18,6 +18,8 @@ namespace Maze_Machine_Learning.ABUtil
         /// <summary> The default difference betwean doubles to consider them equal. </summary>
         public const double DefaultMoE = 1.0 / 3.0 - 0.33333333;
 
+        public const int HashPrime = 8191;
+
         public static bool Compare(double a, double b, double epsilon)
         {
             if (Double.IsNaN(a) || Double.IsNaN(b)) return false;

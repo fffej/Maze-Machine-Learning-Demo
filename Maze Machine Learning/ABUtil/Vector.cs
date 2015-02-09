@@ -133,7 +133,7 @@ namespace Maze_Machine_Learning.ABUtil
 		public bool Equals(Angle obj) { return X == (int)obj.X && Y == (int)obj.Y; }
 		override public bool Equals(object obj) { return false; }
 
-		override public int GetHashCode() { return X ^ Y; }
+		override public int GetHashCode() { return (X + ExtraMath.HashPrime * Y); }
 	}
 
 
@@ -225,7 +225,7 @@ namespace Maze_Machine_Learning.ABUtil
 		public bool Equals(Angle obj) { return ExtraMath.Compare(X, obj.X) && ExtraMath.Compare(Y, obj.Y); }
 		override public bool Equals(object obj) { return false; }
 
-		override public int GetHashCode() { return (int)X ^ (int)Y; }
+		override public int GetHashCode() { return (int)(X + ExtraMath.HashPrime * Y); }
 	}
 
 }

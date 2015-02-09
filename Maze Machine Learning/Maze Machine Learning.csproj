@@ -47,12 +47,17 @@
   <ItemGroup>
     <Compile Include="ABUtil\Angle.cs" />
     <Compile Include="ABUtil\ExtraMath.cs" />
+    <Compile Include="ABUtil\PaintLine.cs" />
+    <Compile Include="ABUtil\Physical.cs" />
+    <Compile Include="ABUtil\PhysicalCircle.cs" />
     <Compile Include="ABUtil\Vector.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Vector.tt</DependentUpon>
     </Compile>
     <Compile Include="ABUtil\Line.cs" />
+    <Compile Include="Bot\Eye.cs" />
+    <Compile Include="Bot\Robot.cs" />
     <Compile Include="Maze\Cell.cs" />
     <Compile Include="Maze\PaintMaze.cs" />
     <Compile Include="Maze\WallP.cs" />
@@ -68,10 +73,14 @@
     <Compile Include="Menu.Designer.cs">
       <DependentUpon>Menu.cs</DependentUpon>
     </Compile>
+    <Compile Include="Neural\Genetics.cs" />
+    <Compile Include="Neural\NNet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RaySolver.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Maze\GridMaze.cs" />
+    <Compile Include="Simulation.cs" />
     <EmbeddedResource Include="Maze_Form.resx">
       <DependentUpon>Maze_Form.cs</DependentUpon>
     </EmbeddedResource>
@@ -107,6 +116,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
